@@ -1,34 +1,9 @@
+CREATE DATABASE IF NOT EXISTS hitokuse DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON hitokuse.* TO 'shin'@'%' IDENTIFIED BY '1234567890';
+USE hitokuse;
 
--- 시퀀스 테이블 생성
-CREATE TABLE sequences ( name varchar(32), currval BIGINT UNSIGNED )
-ENGINE=InnoDB;
+-- Time functions
 
--- 시퀀스 생성 프로시저
-DELIMITER //
-CREATE PROCEDURE `create_sequence`(IN the_name text)
- MODIFIES SQL DATA
- DETERMINISTIC
- BEGIN
-     DELETE FROM sequences WHERE name=the_name;
-     INSERT INTO sequences VALUES (the_name, 0);
- END//
-DELIMITER ;
- 
--- 시퀀스 다음 값 가져오기 프로시저 생성
-DELIMITER //
- CREATE FUNCTION `nextval`(the_name varchar(32))
- RETURNS BIGINT UNSIGNED
- MODIFIES SQL DATA
- DETERMINISTIC
- BEGIN
-     DECLARE ret BIGINT UNSIGNED;
-     UPDATE sequences SET currval=currval+1 WHERE name=the_name;
-     SELECT currval INTO ret FROM sequences WHERE name=the_name limit 1;
-     RETURN ret;
- END//
-DELIMITER ;
-
--- 시간을 VARCHAR(14) 형태로 가져오기
 DELIMITER //
  CREATE FUNCTION `now14`()
  RETURNS VARCHAR(14)
@@ -42,7 +17,6 @@ DELIMITER //
 DELIMITER ;
 
 
--- 이전 시간을 계산해서 VARCHAR(14) 형태로 가져오기
 DELIMITER //
  CREATE FUNCTION `priv14`(privSec BIGINT)
  RETURNS VARCHAR(14)
@@ -68,7 +42,6 @@ DELIMITER //
 DELIMITER ;
 
 
--- 미래 시간을 계산해서 VARCHAR(14) 형태로 가져오기
 DELIMITER //
  CREATE FUNCTION `next14`(nextSec BIGINT)
  RETURNS VARCHAR(14)
@@ -81,7 +54,6 @@ DELIMITER //
  END//
 DELIMITER ;
 
--- VARCHAR(8) 또는 (14)형태의 시간 값을 형태에 맞게 출력
 DELIMITER //
  CREATE FUNCTION `str_time`(timeStr VARCHAR(14), formatType INT)
  RETURNS VARCHAR(20)
@@ -106,63 +78,21 @@ DELIMITER //
  END//
 DELIMITER ;
 
- -- 시퀀스 값 가져오기 예제
--- select nextval('user_seq') from dual;
+DROP TABLE IF EXISTS Register;
+CREATE TABLE IF NOT EXISTS Register (
+	seq INTEGER PRIMARY KEY AUTO_INCREMENT,
+	id VARCHAR(20),
+	domain VARCHAR(100),
+	recUsr VARCHAR(50),
+	recTm VARCHAR(14)
+);
 
- 
--- 함수 dhs.DEC_FILE 구조 내보내기
-DROP FUNCTION IF EXISTS `DEC_FILE`;
-DELIMITER //
-CREATE  FUNCTION `DEC_FILE`(fileNm LONGTEXT, fileRaw LONGBLOB, k LONGTEXT) RETURNS longblob
-    MODIFIES SQL DATA
-    DETERMINISTIC
-BEGIN
-     DECLARE ret LONGBLOB;
-     SELECT IF(fileNm IS NULL OR LENGTH(fileNm) = 0, NULL, AES_DECRYPT(UNHEX(fileRaw), k)) INTO ret FROM DUAL;
-     RETURN ret;
- END//
-DELIMITER ;
-
--- 함수 dhs.DEC_MSG 구조 내보내기
-DROP FUNCTION IF EXISTS `DEC_MSG`;
-DELIMITER //
-CREATE  FUNCTION `DEC_MSG`(msg LONGTEXT, k LONGTEXT) RETURNS longtext CHARSET utf8
-    MODIFIES SQL DATA
-    DETERMINISTIC
-BEGIN
-     DECLARE ret LONGTEXT;
-     SELECT IF(msg IS NULL OR LENGTH(msg) = 0, msg, AES_DECRYPT(UNHEX(msg), k)) INTO ret FROM DUAL;
-     RETURN ret;
- END//
-DELIMITER ;
+CREATE INDEX RegisterIdx1 ON Register(id, domain);
 
 
--- 함수 dhs.ENC_FILE 구조 내보내기
-DROP FUNCTION IF EXISTS `ENC_FILE`;
-DELIMITER //
-CREATE  FUNCTION `ENC_FILE`(fileNm LONGTEXT, fileRaw LONGBLOB, k LONGTEXT) RETURNS longblob
-    MODIFIES SQL DATA
-    DETERMINISTIC
-BEGIN
-     DECLARE ret LONGBLOB;
-     SELECT IF(fileNm IS NULL OR LENGTH(fileNm) = 0, NULL, HEX(AES_ENCRYPT(fileRaw, k))) INTO ret FROM DUAL;
-     RETURN ret;
- END//
-DELIMITER ;
-
--- 함수 dhs.ENC_MSG 구조 내보내기
-DROP FUNCTION IF EXISTS `ENC_MSG`;
-DELIMITER //
-CREATE  FUNCTION `ENC_MSG`(msg LONGTEXT, k LONGTEXT) RETURNS longtext CHARSET utf8
-    MODIFIES SQL DATA
-    DETERMINISTIC
-BEGIN
-     DECLARE ret LONGTEXT;
-     SELECT IF(msg IS NULL OR LENGTH(msg) = 0, msg, HEX(AES_ENCRYPT(msg, k))) INTO ret FROM DUAL;
-     RETURN ret;
- END//
-DELIMITER ;
-
-
--- 그룹 시퀀스 생성
--- call create_sequence('seq');
+DROP TABLE IF EXISTS Analytics;
+CREATE TABLE IF NOT EXISTS Analytics (
+	seq INTEGER,
+	path VARCHAR(256),
+	recTm VARCHAR(14)
+);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ 
+<mapper namespace="com.hitokuse.mappers.RegisterMapper">
+
+<select id="checkRegister" parameterType="RegisterVo" resultType="Integer"><![CDATA[
+SELECT COUNT(*)
+FROM Register
+WHERE id=#{id}
+AND domain = #{domain}
+]]></select>
+
+<insert id="insertRegister" parameterType="RegisterVo">
+INSERT INTO Register (
+	id,
+	domain,
+	recUsr,
+	recTm
+) VALUES (
+	#{id},
+	#{domain},
+	'#system',
+	now14()
+)
+</insert>
+
+</mapper>

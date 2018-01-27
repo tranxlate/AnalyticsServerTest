@@ -5,6 +5,6 @@
 
 <configuration>
 	<typeAliases>
-		<typeAlias alias="DemoVo" type="com.hitokuse.domains.DemoVo" />
+		<typeAlias alias="RegisterVo" type="com.hitokuse.domains.RegisterVo" />
 	</typeAliases>
 </configuration>
