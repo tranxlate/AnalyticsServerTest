@@ -7,6 +7,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <select id="getList" parameterType="DemoVo" resultType="DemoVo"><![CDATA[
 SELECT 1 FROM DUAL
-]]></update>
+]]></select>
 
 </mapper>
