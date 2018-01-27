@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+jdbc.sqlonly    : Logs only SQL
+jdbc.sqltiming  : Logs the SQL, post-execution, including timing execution statistics
+jdbc.audit      : Logs ALL JDBC calls except for ResultSets
+jdbc.resultset  : all calls to ResultSet objects are logged
+jdbc.connection : Logs connection open and close events
+-->
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    	<!-- By default, encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+		<encoder>
+			<pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} %-3level [%thread] %logger{3} - %msg %n
+			</pattern>
+		</encoder>
+	</appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+ 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 파일이 하루에 한개씩 생성된다 -->
+            <fileNamePattern>../logs/AnalyticsServerTest.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- maxHIstory 설정은 위 부분에 롤링 정책에 따라 적용되 된다고 보면된다.
+             위 설정데로 라면 30일이 지난 파일은 삭제가 된다.-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <append>true</append>
+        <encoder>
+            <pattern>
+            	%d{yyyy-MM-dd HH:mm:ss.SSS} %-3level [%thread] %logger{3} - %msg %n
+            </pattern>
+        </encoder>
+    </appender>
+
+	<logger name="jdbc" level="OFF"/>
+
+	<logger name="jdbc.sqlonly" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>  
+  
+	<logger name="jdbc.resultsettable" level="INFO" additivity="false"> 
+		<appender-ref ref="STDOUT" />
+	</logger>  
+  
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+<!-- 
+	<root level="WARN">
+		<appender-ref ref="FILE" />
+	</root>
+-->
+   
+</configuration>
