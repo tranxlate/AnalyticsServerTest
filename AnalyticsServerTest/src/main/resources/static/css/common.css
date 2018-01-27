@@ -1,0 +1,54 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+article, aside,header, footer, hgroup, nav, main, section {
+	display:block;
+}
+
+body {
+	margin:0;
+	/* font-family: "Nanum Gothic", sans-serif; */
+}
+
+img {
+	border: 0em;
+}
+
+a:link {
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a {
+	cursor: pointer;
+}
+
+table {
+	border-spacing: 0em;
+}
+
+.green {
+	color: green;
+}
+
+.red {
+	color: red;
+}
+
+.blue {
+	color: blue;
+}
+
+.center {
+	text-align: center;
+}
+
+.block {
+	display: block;
+}
