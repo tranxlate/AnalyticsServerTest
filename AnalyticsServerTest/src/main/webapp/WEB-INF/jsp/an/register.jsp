@@ -31,7 +31,7 @@ function register() {
 	};
 	var dataAdapter = new $.jqx.dataAdapter(source, {
         loadComplete: function (data) {
-        	alert(data.script);
+        	$("#script").val(data.script);
         }
 	});
 	dataAdapter.dataBind();
@@ -68,7 +68,7 @@ function register() {
 		</article>
 		<article class="script">
 			<h2 class="w3-center red">Script</h2>
-			<textarea></textarea>
+			<textarea id="script"></textarea>
 		</article>
 	</section>
 	<footer></footer>

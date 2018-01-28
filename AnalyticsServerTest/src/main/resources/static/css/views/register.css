@@ -4,7 +4,7 @@ article {
 	margin-right:auto;
 }
 
-.register {
+.register, .analytics {
 	margin-top:5%;
 }
 
@@ -15,7 +15,7 @@ article {
 
 textarea {
     width: 100%;
-    height: 175px;
+    height: 250px;
     padding: 12px 20px;
     box-sizing: border-box;
     border: 2px solid #ccc;
@@ -23,4 +23,9 @@ textarea {
     background-color: #f8f8f8;
     font-size: 16px;
     resize: none;
+}
+
+#chart1, #chart2 {
+	height: 300px;
+	margin-top: 2.5%;
 }

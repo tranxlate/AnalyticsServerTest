@@ -6,5 +6,6 @@
 <configuration>
 	<typeAliases>
 		<typeAlias alias="RegisterVo" type="com.hitokuse.domains.RegisterVo" />
+		<typeAlias alias="AnalyticsVo" type="com.hitokuse.domains.AnalyticsVo" />
 	</typeAliases>
 </configuration>

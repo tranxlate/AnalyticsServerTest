@@ -96,3 +96,5 @@ CREATE TABLE IF NOT EXISTS Analytics (
 	path VARCHAR(256),
 	recTm VARCHAR(14)
 );
+
+CREATE INDEX AnalyticsIdx1 ON Analytics(seq, recTm);

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ 
+<mapper namespace="com.hitokuse.mappers.AnalyticsMapper">
+
+<insert id="insertPv" parameterType="AnalyticsVo"><![CDATA[
+INSERT INTO Analytics (
+	seq,
+	path,
+	recTm
+) VALUES (
+	(SELECT seq FROM Register WHERE id = #{id} AND domain = #{domain}),
+	#{path},
+	now14()
+)
+]]></insert>
+
+
+<select id="getTotalPv" parameterType="AnalyticsVo" resultType="AnalyticsVo"><![CDATA[
+SELECT COUNT(*) val
+FROM Analytics a,  Register r
+WHERE a.seq = r.seq
+AND r.id = #{id}
+AND SUBSTR(a.recTm, 1, 8) >= SUBSTR(priv14(60*60*24*6), 1, 8)
+]]></select>
+
+<select id="getChart1" parameterType="AnalyticsVo" resultType="AnalyticsVo"><![CDATA[
+SELECT
+	str_time(d.dt, 8) recTm,
+	COUNT(a.seq) val
+FROM (
+	SELECT SUBSTR(priv14(60*60*24*6), 1, 8) dt
+	UNION
+	SELECT SUBSTR(priv14(60*60*24*5), 1, 8) dt
+	UNION
+	SELECT SUBSTR(priv14(60*60*24*4), 1, 8) dt
+	UNION
+	SELECT SUBSTR(priv14(60*60*24*3), 1, 8) dt
+	UNION
+	SELECT SUBSTR(priv14(60*60*24*2), 1, 8) dt
+	UNION
+	SELECT SUBSTR(priv14(60*60*24*1), 1, 8) dt
+	UNION
+	SELECT SUBSTR(now14(), 1, 8) dt
+) d
+	LEFT OUTER JOIN (
+		SELECT 
+			a.recTm, 
+			a.seq 
+		FROM Analytics a, Register r
+		WHERE a.seq = r.seq
+		AND r.id = #{id}
+	) a
+	ON d.dt = SUBSTR(a.recTm, 1, 8)
+	AND SUBSTR(a.recTm, 1, 8) >= SUBSTR(priv14(60*60*24*6), 1, 8)
+GROUP BY d.dt
+]]></select>
+
+<select id="getChart2" parameterType="AnalyticsVo" resultType="AnalyticsVo"><![CDATA[
+SELECT
+	a.path,
+	COUNT(*) val
+FROM Analytics a, Register r
+WHERE a.seq = r.seq
+AND r.id = #{id}
+AND SUBSTR(a.recTm, 1, 8) >= SUBSTR(priv14(60*60*24*6), 1, 8)
+GROUP BY a.path
+ORDER BY val DESC
+LIMIT 0, 10
+]]></select>
+
+</mapper>

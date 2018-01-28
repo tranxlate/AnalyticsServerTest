@@ -14,5 +14,5 @@ import lombok.Data;
 @Primary
 @Data
 public class AppServerConfig {
-	
+	String host;
 }
