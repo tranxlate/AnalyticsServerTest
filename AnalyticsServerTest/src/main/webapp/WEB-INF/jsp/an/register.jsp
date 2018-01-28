@@ -67,7 +67,7 @@ function register() {
 			</form>
 		</article>
 		<article class="script">
-			<h2 class="w3-center">Script</h2>
+			<h2 class="w3-center red">Script</h2>
 			<textarea></textarea>
 		</article>
 	</section>
